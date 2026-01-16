@@ -22,7 +22,7 @@ export interface Order {
   size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
   excluded_teams: string[];
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered';
-  payment_method: 'stripe' | 'flow';
+  payment_method: 'paypal' | 'flow' | 'stripe';
   payment_id: string;
   total_clp: number;
   tracking_number?: string;
