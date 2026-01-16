@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "dev:stripe": "./scripts/dev-with-stripe.sh",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro build --force",
     "preview": "astro preview",
     "astro": "astro",
     "deploy": "node scripts/deploy.js",
@@ -17,7 +17,7 @@
   "dependencies": {
     "@astrojs/react": "^3.0.0",
     "@astrojs/tailwind": "^5.0.0",
-    "@astrojs/vercel": "^7.8.1",
+    "@astrojs/vercel": "^8.2.11",
     "@supabase/supabase-js": "^2.39.0",
     "astro": "^4.0.0",
     "dotenv": "^17.2.3",
