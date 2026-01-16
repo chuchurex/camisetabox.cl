@@ -26,6 +26,9 @@
     "stripe": "^14.0.0",
     "tailwindcss": "^3.4.0"
   },
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.4.0",
     "@types/react": "^18.3.27",
