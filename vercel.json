@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "framework": "astro",
+  "env": {
+    "PUBLIC_SUPABASE_URL": "@public_supabase_url",
+    "PUBLIC_SUPABASE_ANON_KEY": "@public_supabase_anon_key",
+    "PUBLIC_STRIPE_PUBLISHABLE_KEY": "@public_stripe_publishable_key",
+    "PUBLIC_FLOW_MODE": "@public_flow_mode",
+    "PUBLIC_PAYPAL_CLIENT_ID": "@public_paypal_client_id",
+    "PUBLIC_PAYPAL_MODE": "@public_paypal_mode"
+  }
+}

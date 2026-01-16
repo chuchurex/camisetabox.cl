@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import CheckoutForm from '../../components/CheckoutForm';
+import { products } from '../../lib/supabase';
+
+export const prerender = false;
+
+const { productId } = Astro.params;
+const product = products.find(p => p.id === productId);
+
+if (!product) {
+  return Astro.redirect('/');
+}
+---
+
+<Layout title={`Checkout - ${product.name}`}>
+  <main class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-8">
+      <a href="/" class="text-accent hover:underline">&larr; Volver</a>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Resumen del producto -->
+      <div class="bg-primary rounded-lg p-6 border border-gray-700 h-fit">
+        <h2 class="text-2xl font-bold mb-4">Resumen de tu compra</h2>
+        <div class="space-y-4">
+          <div>
+            <h3 class="text-xl font-bold text-accent">{product.name}</h3>
+            <p class="text-gray-400">{product.description}</p>
+          </div>
+
+          <div class="border-t border-gray-700 pt-4">
+            <div class="flex justify-between items-center text-lg">
+              <span class="font-semibold">Total:</span>
+              <span class="text-2xl font-bold text-accent">
+                ${product.price_clp.toLocaleString('es-CL')}
+              </span>
+            </div>
+          </div>
+
+          <div class="bg-gray-800 rounded-lg p-4 text-sm">
+            <p class="text-gray-300">
+              <strong>Incluye:</strong>
+            </p>
+            <ul class="list-disc list-inside text-gray-400 mt-2 space-y-1">
+              <li>Camiseta 100% original</li>
+              <li>Envío a domicilio</li>
+              <li>Sorpresa garantizada</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de checkout -->
+      <div class="bg-primary rounded-lg p-6 border border-gray-700">
+        <h2 class="text-2xl font-bold mb-6">Datos de compra</h2>
+        <CheckoutForm
+          client:load
+          productId={product.id}
+          productName={product.name}
+          productPrice={product.price_clp}
+        />
+      </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="mt-12 bg-primary rounded-lg p-6 border border-gray-700">
+      <h3 class="text-xl font-bold mb-4">Información importante</h3>
+      <div class="grid md:grid-cols-3 gap-6 text-sm text-gray-400">
+        <div>
+          <h4 class="font-semibold text-white mb-2">Envío</h4>
+          <p>Despacho en 3-5 días hábiles a todo Chile</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-2">Garantía</h4>
+          <p>100% productos originales con documentación</p>
+        </div>
+        <div>
+          <h4 class="font-semibold text-white mb-2">Pago seguro</h4>
+          <p>Múltiples métodos de pago con encriptación SSL</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>

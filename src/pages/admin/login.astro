@@ -1,0 +1,100 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export const prerender = false;
+---
+
+<Layout title="Admin - Login">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold mb-2">
+          <span class="text-accent">Camiseta</span>Box Admin
+        </h1>
+        <p class="text-gray-400">Panel de administración</p>
+      </div>
+
+      <div class="bg-primary rounded-lg p-8 border border-gray-700">
+        <form id="loginForm" class="space-y-6">
+          <div>
+            <label for="email" class="block text-sm font-semibold mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              required
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
+              placeholder="admin@camisetabox.cl"
+            />
+          </div>
+
+          <div>
+            <label for="password" class="block text-sm font-semibold mb-2">
+              Contraseña
+            </label>
+            <input
+              type="password"
+              id="password"
+              required
+              class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent outline-none"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <div id="error" class="hidden bg-red-500/10 border border-red-500 rounded-lg p-3 text-red-500 text-sm"></div>
+
+          <button
+            type="submit"
+            class="w-full bg-accent hover:bg-red-600 text-white font-bold py-3 rounded-lg transition-colors"
+          >
+            Iniciar sesión
+          </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-500">
+          <p>Credenciales por defecto:</p>
+          <p class="mt-1">Email: <code class="text-gray-300">admin@camisetabox.cl</code></p>
+          <p>Password: <code class="text-gray-300">admin123</code></p>
+        </div>
+      </div>
+
+      <div class="mt-6 text-center">
+        <a href="/" class="text-accent hover:underline text-sm">
+          ← Volver al sitio
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { supabase } from '../../lib/supabase';
+
+    const form = document.getElementById('loginForm') as HTMLFormElement;
+    const errorDiv = document.getElementById('error') as HTMLDivElement;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = (document.getElementById('email') as HTMLInputElement).value;
+      const password = (document.getElementById('password') as HTMLInputElement).value;
+
+      errorDiv.classList.add('hidden');
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        // Redirigir al dashboard
+        window.location.href = '/admin/dashboard';
+      } catch (error: any) {
+        errorDiv.textContent = error.message || 'Error al iniciar sesión';
+        errorDiv.classList.remove('hidden');
+      }
+    });
+  </script>
+</Layout>

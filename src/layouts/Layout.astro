@@ -1,0 +1,49 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Mystery box de camisetas de futbol originales en Chile' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} | CamisetaBox</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-background text-white min-h-screen font-sans">
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-primary: #0a0a1a;
+    --color-accent: #e94560;
+    --color-accent-secondary: #00d2ff;
+    --color-background: #05050a;
+    --font-header: 'Archivo Black', sans-serif;
+  }
+
+  body {
+    background: radial-gradient(circle at top center, #0a0a1a 0%, #05050a 100%);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-header);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+</style>
