@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Test de Compra - Ariel">
+  <div class="min-h-screen bg-gradient-to-br from-[#0f0f1a] to-[#1a1a2e] flex items-center justify-center p-4">
+    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 max-w-md w-full border border-white/20">
+      <h1 class="text-3xl font-bold text-white mb-4 text-center">Test de Compra 🧪</h1>
+      <p class="text-white/80 text-center mb-6">
+        Hola Ariel! 👋 <br/>
+        Prueba el proceso de compra con esta caja de $1 peso
+      </p>
+
+      <div class="bg-gradient-to-r from-[#e94560]/20 to-purple-500/20 rounded-xl p-6 mb-6 border border-[#e94560]/30">
+        <h2 class="text-xl font-bold text-white mb-2">Caja de Prueba</h2>
+        <p class="text-white/70 mb-4">Caja especial de testing</p>
+        <div class="text-3xl font-bold text-[#e94560]">$1 CLP</div>
+      </div>
+
+      <button
+        id="createTestPayment"
+        class="w-full bg-gradient-to-r from-[#e94560] to-purple-500 text-white font-bold py-4 rounded-xl hover:shadow-lg hover:shadow-[#e94560]/50 transition-all duration-300 hover:scale-105"
+      >
+        🚀 Generar Link de Pago
+      </button>
+
+      <div id="paymentLink" class="mt-6 hidden">
+        <div class="bg-green-500/20 border border-green-500/50 rounded-xl p-4">
+          <p class="text-green-300 text-sm mb-3">✅ Link de pago generado!</p>
+          <a
+            id="linkUrl"
+            href=""
+            target="_blank"
+            class="block w-full bg-green-500 text-white font-bold py-3 rounded-lg hover:bg-green-600 transition-colors text-center"
+          >
+            Ir a Mercado Pago →
+          </a>
+        </div>
+      </div>
+
+      <div id="error" class="mt-6 hidden">
+        <div class="bg-red-500/20 border border-red-500/50 rounded-xl p-4">
+          <p class="text-red-300 text-sm" id="errorMessage"></p>
+        </div>
+      </div>
+
+      <div id="loading" class="mt-6 hidden">
+        <div class="flex items-center justify-center space-x-3">
+          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+          <span class="text-white/70">Generando link...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const button = document.getElementById('createTestPayment') as HTMLButtonElement;
+    const paymentLinkDiv = document.getElementById('paymentLink') as HTMLDivElement;
+    const linkUrl = document.getElementById('linkUrl') as HTMLAnchorElement;
+    const errorDiv = document.getElementById('error') as HTMLDivElement;
+    const errorMessage = document.getElementById('errorMessage') as HTMLParagraphElement;
+    const loadingDiv = document.getElementById('loading') as HTMLDivElement;
+
+    button.addEventListener('click', async () => {
+      // Ocultar elementos previos
+      paymentLinkDiv.classList.add('hidden');
+      errorDiv.classList.add('hidden');
+      loadingDiv.classList.remove('hidden');
+      button.disabled = true;
+
+      try {
+        const response = await fetch('/api/create-test-payment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            customerEmail: 'ariel@test.com',
+            customerName: 'Ariel',
+            customerPhone: '+56912345678',
+            amount: 1, // $1 peso para prueba
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Error al crear el pago');
+        }
+
+        // Mostrar link de pago
+        loadingDiv.classList.add('hidden');
+        paymentLinkDiv.classList.remove('hidden');
+
+        // Usar sandbox_init_point si existe (modo prueba), sino usar init_point
+        const checkoutUrl = data.sandbox_init_point || data.init_point;
+        linkUrl.href = checkoutUrl;
+
+      } catch (error: any) {
+        loadingDiv.classList.add('hidden');
+        errorDiv.classList.remove('hidden');
+        errorMessage.textContent = error.message;
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</Layout>
